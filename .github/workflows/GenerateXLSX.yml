@@ -23,21 +23,20 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Clone the Repo
-      - name: 将仓库克隆到本地
+      - name: 将仓库克隆到 Github Actions 服务器上
         run: git clone https://github.com/SEALchanPS/f1WeeklyScoreTable.git
       # Get Files Compressed
-      - name: 将分散的文件打包
+      - name: 使用 7-Zip 将分散的文件打包为 XLSX 文件
         run: |
           cd f1WeeklyScoreTable
           ren 7z.bin 7z.exe
-          set datenow=%date%
-          7z.exe a "初三年级 F1 班网课加分详细情况.xlsx" _rels\
-          7z.exe a "初三年级 F1 班网课加分详细情况.xlsx" docProps\
-          7z.exe a "初三年级 F1 班网课加分详细情况.xlsx" xl\
-          7z.exe a "初三年级 F1 班网课加分详细情况.xlsx" [Content_Types].xml
+          7z.exe a "初三年级_F1_班网课加分详细情况.xlsx" _rels\
+          7z.exe a "初三年级_F1_班网课加分详细情况.xlsx" docProps\
+          7z.exe a "初三年级_F1_班网课加分详细情况.xlsx" xl\
+          7z.exe a "初三年级_F1_班网课加分详细情况.xlsx" [Content_Types].xml
       # Upload the Files
-      - name: 上传 XLSX 文件成果
+      - name: 上传生成的 XLSX 文件
         uses: actions/upload-artifact@master
         with:
           name: weeklyScoreTable.xlsx
-          path: f1WeeklyScoreTable/初三年级 F1 班网课加分详细情况.xlsx
+          path: f1WeeklyScoreTable/初三年级_F1_班网课加分详细情况.xlsx
