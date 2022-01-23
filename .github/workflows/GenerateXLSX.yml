@@ -1,0 +1,43 @@
+# This is a basic workflow to help you get started with Actions
+
+name: 生成 XLSX 文件
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  generate:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Clone the Repo
+      - name: 将仓库克隆到本地
+        run: git clone https://github.com/SEALchanPS/f1WeeklyScoreTable.git
+      # Get Files Compressed
+      - name: 将分散的文件打包
+        run: |
+          cd f1WeeklyScoreTable
+          ren 7z.bin 7z.exe
+          set datenow=%date%
+          7z.exe a "初三年级 F1 班网课加分详细情况.xlsx" _rels\
+          7z.exe a "初三年级 F1 班网课加分详细情况.xlsx" docProps\
+          7z.exe a "初三年级 F1 班网课加分详细情况.xlsx" xl\
+          7z.exe a "初三年级 F1 班网课加分详细情况.xlsx" [Content_Types].xml
+      # Upload the Files
+      - name: 上传 XLSX 文件成果
+        uses: actions/upload-artifact@master
+        with:
+          name: weeklyScoreTable.xlsx
+          path: f1WeeklyScoreTable/初三年级 F1 班网课加分详细情况.xlsx
